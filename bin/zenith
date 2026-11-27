@@ -1,8 +1,18 @@
 #!/usr/bin/env sh
-# Utility script for running zenith directly from checkout
+# Utility script for running zenith directly from checkout or symlink
 set -eu
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+TARGET="$0"
+while [ -h "$TARGET" ]; do
+    DIR="$(cd -P "$(dirname "$TARGET")" >/dev/null 2>&1 && pwd)"
+    TARGET="$(readlink "$TARGET")"
+    case "$TARGET" in
+        /*) ;;
+        *) TARGET="$DIR/$TARGET" ;;
+    esac
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$TARGET")" >/dev/null 2>&1 && pwd)"
+
 export PYTHONPATH="${SCRIPT_DIR}/../src:${PYTHONPATH:-}"
 
 exec python3 -m zenith "$@"
