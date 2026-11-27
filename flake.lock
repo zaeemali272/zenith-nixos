@@ -16,52 +16,9 @@
         "type": "github"
       }
     },
-    "quickshell": {
-      "inputs": {
-        "nixpkgs": [
-          "zenith-shell",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1785704021,
-        "narHash": "sha256-eQtczKMAS4ItlB4pr1B3MqBZiyRVl2nkqNdtyRSQMa8=",
-        "ref": "refs/heads/master",
-        "rev": "28771c7c74b42e20afca0b1b63980cb46515537c",
-        "revCount": 835,
-        "type": "git",
-        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
-      }
-    },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "zenith-shell": "zenith-shell"
-      }
-    },
-    "zenith-shell": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "quickshell": "quickshell"
-      },
-      "locked": {
-        "lastModified": 1795759073,
-        "narHash": "sha256-M2CA9Pyl6pEtGHaXFPsM7s7ZN4ksHnvYHobqolV+h/8=",
-        "owner": "zaeemali272",
-        "repo": "zenith-shell",
-        "rev": "030a9d03db97c876985cf395213830df8faf0ef2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zaeemali272",
-        "repo": "zenith-shell",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

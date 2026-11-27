@@ -15,8 +15,6 @@
   ffmpeg,
   dconf,
   killall,
-  zenith-shell ? null,
-  withShell ? false,
 }:
 python3.pkgs.buildPythonApplication {
   pname = "zenith-cli";
@@ -37,22 +35,20 @@ python3.pkgs.buildPythonApplication {
   pythonImportsCheck = ["zenith"];
 
   nativeBuildInputs = [installShellFiles];
-  propagatedBuildInputs =
-    [
-      swappy
-      libnotify
-      slurp
-      wl-clipboard
-      cliphist
-      xdg-utils
-      grim
-      fuzzel
-      gpu-screen-recorder
-      ffmpeg
-      dconf
-      killall
-    ]
-    ++ lib.optional (withShell && zenith-shell != null) zenith-shell;
+  propagatedBuildInputs = [
+    swappy
+    libnotify
+    slurp
+    wl-clipboard
+    cliphist
+    xdg-utils
+    grim
+    fuzzel
+    gpu-screen-recorder
+    ffmpeg
+    dconf
+    killall
+  ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = rev;
 
