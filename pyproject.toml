@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "zenith-cli"
+requires-python = ">=3.11"
+dynamic = ["version"]
+description = "Unified CLI for Zenith dotfiles and desktop system management"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Zaeem Ali", email = "zaeemali272@gmail.com" }
+]
+dependencies = [
+    "pillow",
+    "materialyoucolor"
+]
+
+[project.scripts]
+zenith = "zenith:main"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "src",
+    "completions",
+    "README.md",
+    "LICENSE"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/zenith"]
+
+[tool.ruff]
+line-length = 120
