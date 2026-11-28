@@ -88,12 +88,21 @@ def parse_args() -> tuple[argparse.ArgumentParser, argparse.Namespace]:
     resizer_parser.add_argument("width", nargs="?", help="width")
     resizer_parser.add_argument("height", nargs="?", help="height")
 
+    def parse_days(value: str) -> int:
+        s = value.strip().lower()
+        if s.endswith("d"):
+            s = s[:-1]
+        days = int(s)
+        if days < 0:
+            raise argparse.ArgumentTypeError("days must be >= 0")
+        return days
+
     # --- system (explicit subcommand) ---
     sys_parser = command_parser.add_parser("system", help="system management commands")
     sys_parser.set_defaults(cls=system.Command)
     sys_parser.add_argument("system_action", choices=["update", "rebuild", "rollback", "gc", "clean", "doctor", "where"])
     sys_parser.add_argument("action_target", nargs="?", default="switch")
-    sys_parser.add_argument("--days", type=int, default=7)
+    sys_parser.add_argument("--days", type=parse_days, default=None, help="delete generations older than N days (default: 7)")
     sys_parser.add_argument("passthrough", nargs="*", help="extra arguments passed through to rebuild")
 
     # --- top-level system aliases for direct convenience & backwards-compatibility ---
@@ -112,11 +121,13 @@ def parse_args() -> tuple[argparse.ArgumentParser, argparse.Namespace]:
 
     gc_p = command_parser.add_parser("gc", help="garbage collect old generations")
     gc_p.set_defaults(cls=system.Command, system_action="gc")
-    gc_p.add_argument("days", nargs="?", type=int, default=7)
+    gc_p.add_argument("days", nargs="?", type=parse_days, default=None, help="delete generations older than N days (default: 7)")
+    gc_p.add_argument("--days", dest="days_opt", type=parse_days, default=None, help="delete generations older than N days (default: 7)")
 
     clean_p = command_parser.add_parser("clean", help="deep system cleanup (temp, logs, gc, store)")
     clean_p.set_defaults(cls=system.Command, system_action="clean")
-    clean_p.add_argument("days", nargs="?", type=int, default=7)
+    clean_p.add_argument("days", nargs="?", type=parse_days, default=None, help="delete generations older than N days (default: 7)")
+    clean_p.add_argument("--days", dest="days_opt", type=parse_days, default=None, help="delete generations older than N days (default: 7)")
 
     doctor_p = command_parser.add_parser("doctor", help="check and verify system components")
     doctor_p.set_defaults(cls=system.Command, system_action="doctor")

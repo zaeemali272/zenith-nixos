@@ -101,8 +101,24 @@ class Command:
         else:
             warn("rollback is currently only supported on NixOS")
 
+    def _resolve_days(self) -> int:
+        days_opt = getattr(self.args, "days_opt", None)
+        if days_opt is not None:
+            return days_opt
+        days = getattr(self.args, "days", None)
+        if days is not None:
+            return days
+        target = getattr(self.args, "action_target", None)
+        if isinstance(target, str) and target != "switch":
+            s = target.strip().lower()
+            if s.endswith("d"):
+                s = s[:-1]
+            if s.isdigit():
+                return int(s)
+        return 7
+
     def gc(self) -> None:
-        days = getattr(self.args, "days", 7) or 7
+        days = self._resolve_days()
         if is_nixos():
             step(f"removing NixOS generations older than {days}d")
             subprocess.run(["sudo", "nix-collect-garbage", "--delete-older-than", f"{days}d"], check=False)
@@ -117,7 +133,7 @@ class Command:
             ok("cache cleaned")
 
     def clean(self) -> None:
-        days = getattr(self.args, "days", 7) or 7
+        days = self._resolve_days()
         cfg = self.get_config_dir()
 
         step(f"1/5: running garbage collection (older than {days}d)")
